@@ -8,7 +8,9 @@ import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorContr
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorControlParams;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.OrbitMotor;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.PositionUnits;
-import org.firstinspires.ftc.teamcode.robotData.Constants;
+import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
+
+import java.security.PublicKey;
 
 public class Telescope {
     private static OrbitMotor telescopeMotor;
@@ -19,38 +21,45 @@ public class Telescope {
     private static float zeroPos = 0;
 
     public static void init(HardwareMap hardwareMap,String name){
-        telescopeMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.FLOAT, telescopeParams, 0 /* should be TelescopeConstants.gearRatio */, 0, PositionUnits.CM);
-
+        telescopeMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, telescopeParams, 0 /* should be TelescopeConstants.gearRatio */, 0, PositionUnits.CM);
 
         }
     public static void operate(TelescopeStates state){
         switch (state){
             case TRAVEL:
-                wantedLength = TelescopeConstants.travelPos;
+                wantedLength = TelescopeConstants.travelLegnth;
                 break;
 
             case INTAKE:
-                wantedLength = TelescopeConstants.intakePos;
+                wantedLength = TelescopeConstants.intakeLegnth;
                 break;
 
             case LOW_BASKET:
-                wantedLength = TelescopeConstants.lowBasketPose;
+                wantedLength = TelescopeConstants.lowBasketLegnth;
                 break;
 
             case HIGH_BASKET:
-                wantedLength = TelescopeConstants.highBasketPos;
+                wantedLength = TelescopeConstants.highBasketLegnth;
                 break;
 
             case LOW_CHAMBER:
-                wantedLength = TelescopeConstants.lowChamberPos;
+                wantedLength = TelescopeConstants.lowChamberLegnth;
                 break;
+
             case HIGH_CHAMBER:
-                wantedLength = TelescopeConstants.highChamberPos;
+                wantedLength = TelescopeConstants.highChamberLegnth;
+                break;
         }
-        telescopeMotor.setPower(MotorControlMode.MOTION_MAGIC_VELOCITY, wantedLength, 0);
+        telescopeMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedLength, getArbitaryF());
 
         telescopeMotor.getCurrentPosition(PositionUnits.CM);
 
         lastState = currentState;
+    }
+    public static float getArbitaryF(){
+        final float g = MathFuncs.sin(0);
+        final float spring = -TelescopeConstants.Kspring * (telescopeMotor.getCurrentPosition(PositionUnits.CM) - TelescopeConstants.travelLegnth);
+
+        return spring + g;
     }
 }
