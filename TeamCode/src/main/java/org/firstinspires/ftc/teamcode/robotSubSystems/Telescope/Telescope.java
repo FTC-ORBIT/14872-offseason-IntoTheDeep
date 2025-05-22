@@ -9,8 +9,7 @@ import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorContr
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.OrbitMotor;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.PositionUnits;
 import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
-
-import java.security.PublicKey;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Arm.ArmConstants;
 
 public class Telescope {
     private static OrbitMotor telescopeMotor;
@@ -20,8 +19,9 @@ public class Telescope {
     private static TelescopeStates lastState = currentState;
     private static float zeroPos = 0;
 
+
     public static void init(HardwareMap hardwareMap,String name){
-        telescopeMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, telescopeParams, 0 /* should be TelescopeConstants.gearRatio */, 0, PositionUnits.CM);
+        telescopeMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, telescopeParams, 0 /* should be TelescopeConstants.gearRatio */, 0, PositionUnits.M);
 
         }
     public static void operate(TelescopeStates state){
@@ -52,14 +52,14 @@ public class Telescope {
         }
         telescopeMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedLength, getArbitaryF());
 
-        telescopeMotor.getCurrentPosition(PositionUnits.CM);
-
         lastState = currentState;
     }
     public static float getArbitaryF(){
-        final float g = MathFuncs.sin(0);
+        final float gForce = MathFuncs.sin(0);
         final float spring = -TelescopeConstants.Kspring * (telescopeMotor.getCurrentPosition(PositionUnits.CM) - TelescopeConstants.travelLegnth);
 
-        return spring + g;
+        return spring + gForce;
     }
+    public static float telescope_distance_LCG = (zeroPos + telescopeMotor.getCurrentPosition(PositionUnits.M)) / 2 + ArmConstants.intakeMass;
+    //LCG is the length from center of gravity of the arm
 }

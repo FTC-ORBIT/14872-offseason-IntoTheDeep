@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorContr
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorControlParams;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.OrbitMotor;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.PositionUnits;
+import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Telescope.Telescope;
 
 public class Arm {
     public static OrbitMotor armMotor;
@@ -20,6 +22,7 @@ public class Arm {
     public static ArmStates currentState;
     public static ArmStates lastState;
     public static MotorControlParams armControlParams = new MotorControlParams(ArmConstants.KP, ArmConstants.KI, ArmConstants.KD, ArmConstants.Izone, ArmConstants.KS, ArmConstants.KV);
+    public static final float horzAngle = 0f;
 
     public static void init(HardwareMap hardwareMap, String name, String name2, String name3){
         armMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
@@ -64,9 +67,14 @@ public class Arm {
                 break;
 
         }
-        armMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedAngle, 0);
+        final float gForce = ArmConstants.KG * MathFuncs.sin(horzAngle - armMotor.getCurrentPosition(PositionUnits.DEGREES)) * Telescope.telescope_distance_LCG;
+
+        armMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedAngle,gForce);
+        armMotor2.slave(armMotor);
+
+
     }
-    //public static getArbitraryF(){
-      //  final float g =
-//    }
+  //  public static float getArbitraryF(){
+    //  final float gForce = MathFuncs.sin(0);
+    //}
 }
