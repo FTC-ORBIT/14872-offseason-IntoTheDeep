@@ -19,8 +19,12 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
 import org.firstinspires.ftc.teamcode.OrbitHardware.Sensors.OrbitGyro;
 
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Arm.Arm;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Intake.Intake;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Pinch.Pinch;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 import org.firstinspires.ftc.teamcode.robotSubSystems.SubSystemManager;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Telescope.Telescope;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.DriveTrainOmni.DrivetrainOmni;
 
 @Config
@@ -59,6 +63,10 @@ public class Robot extends LinearOpMode {
         ElapsedTime robotTime = new ElapsedTime();
         robotTime.reset();
         DrivetrainOmni.init(hardwareMap);
+        Arm.init(hardwareMap, "armMotor", "armMotor2","armServo");
+        Telescope.init(hardwareMap,"telMotor");
+        Pinch.init(hardwareMap, "pinchServo");
+        Intake.init(hardwareMap, "cargoServo1", "cargoServo2");
 //        DriveTrainTank.init(hardwareMap);
         ScoringAutomator.initAssists(hardwareMap,"webcam1","webcam2");
         OrbitGyro.init(hardwareMap);

@@ -13,6 +13,10 @@ import org.firstinspires.ftc.teamcode.ScoringAutomator;
 import org.firstinspires.ftc.teamcode.autonomous.OrbitAutonomousGeneral;
 import org.firstinspires.ftc.teamcode.PoseTracker.OrbitPoseTracker;
 import org.firstinspires.ftc.teamcode.roadRunner_1_0.Drawing;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Arm.ArmStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Intake.IntakeStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Pinch.PinchStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Telescope.TelescopeStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.DriveTrainOmni.DrivetrainOmni;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.AutoDrivesAndAssist.Assists.DriveByAprilTags.DriveByAprilTags;
 import org.firstinspires.ftc.teamcode.OrbitHardware.Sensors.OrbitGyro;
@@ -25,6 +29,10 @@ public class SubSystemManager {
 
     public static RobotState wantedState = RobotState.TRAVEL;
     private static boolean blink = false;
+    public static ArmStates armState = ArmStates.TRAVEL;
+    public static TelescopeStates telescopeState = TelescopeStates.TRAVEL;
+    public static PinchStates pinchState = PinchStates.CLOSED;
+    public static IntakeStates intakeState = IntakeStates.STOP;
     public static Pose2D robotPos;
 
     private static RobotState getStateFromDriver(Gamepad gamepad) {
@@ -33,13 +41,13 @@ public class SubSystemManager {
             lastState = GlobalData.lastStateAuto;
         }
 
-        wantedState = gamepad.b ? RobotState.TRAVEL
-                : gamepad.a ? RobotState.INTAKE
-                : lastState;
-
         // TODO => chose one option, if the orbitGamePad works use this one:
         wantedState = GlobalData.driverRawButtons.get(ButtonsId.B) ? RobotState.TRAVEL
                 : GlobalData.driverRawButtons.get(ButtonsId.A) ? RobotState.INTAKE
+                : GlobalData.driverRawButtons.get(ButtonsId.Y) ? RobotState.HIGH_BASKET
+                : GlobalData.driverRawButtons.get(ButtonsId.X) ? RobotState.LOW_BASKET
+                : GlobalData.driverRawButtons.get(ButtonsId.RIGHT_BUMPER) ? RobotState.DEPLETE
+                : GlobalData.driverRawButtons.get(ButtonsId.START) ? RobotState.CLIMB
                 : lastState;
 
 
@@ -80,9 +88,58 @@ public class SubSystemManager {
 
         switch (currentState) {
             case TRAVEL:
+                armState = ArmStates.TRAVEL;
+                telescopeState = TelescopeStates.TRAVEL;
+                pinchState = PinchStates.CLOSED;
+                intakeState = IntakeStates.STOP;
                 break;
+
             case INTAKE:
+                armState = ArmStates.INTAKE;
+                telescopeState = TelescopeStates.TRAVEL;
+                pinchState = PinchStates.MID_OPEN;
+                intakeState = IntakeStates.INTAKE;
                 break;
+
+            case HIGH_BASKET:
+                armState = ArmStates.HIGH_BASKET;
+                telescopeState = TelescopeStates.HIGH_BASKET;
+                pinchState = PinchStates.CLOSED;
+                intakeState = IntakeStates.STOP;
+                break;
+
+            case LOW_BASKET:
+                armState = ArmStates.LOW_BASKET;
+                telescopeState = TelescopeStates.LOW_BASKET;
+                pinchState = PinchStates.CLOSED;
+                intakeState = IntakeStates.STOP;
+                break;
+
+            case HIGH_CHAMBER:
+                armState = ArmStates.HIGH_CHAMBER;
+                telescopeState = TelescopeStates.HIGH_CHAMBER;
+                pinchState = PinchStates.CLOSED;
+                intakeState = IntakeStates.STOP;
+                break;
+
+            case LOW_CHAMBER:
+                armState = ArmStates.LOW_CHAMBER;
+                telescopeState = TelescopeStates.TRAVEL;
+                pinchState = PinchStates.CLOSED;
+                intakeState = IntakeStates.STOP;
+                break;
+
+            case CLIMB:
+                armState = ArmStates.CLIMB;
+                telescopeState = TelescopeStates.CLIMB;
+                pinchState = PinchStates.CLOSED;
+                intakeState = IntakeStates.STOP;
+                break;
+
+            case DEPLETE:
+                intakeState = IntakeStates.DEPLETE;
+                pinchState = PinchStates.OPEN;
+
         }
 
         ScoringAutomator.update();

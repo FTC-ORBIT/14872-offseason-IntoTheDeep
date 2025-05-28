@@ -7,6 +7,7 @@ public  class TelescopeConstants {
     static final float lowBasketLegnth = 0;
     static final float highChamberLegnth = 0;
     static final float lowChamberLegnth = 0;
+    static final float climbLegnth = 0;
     static final double KP = 0;
     static final double KI = 0;
     static final double KD = 0;

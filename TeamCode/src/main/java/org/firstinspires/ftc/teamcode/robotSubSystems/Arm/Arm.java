@@ -10,71 +10,83 @@ import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorContr
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.OrbitMotor;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.PositionUnits;
 import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
-import org.firstinspires.ftc.teamcode.robotSubSystems.Telescope.Telescope;
 
 public class Arm {
     public static OrbitMotor armMotor;
     public static OrbitMotor armMotor2;
     public static Servo armServo;
     public static float currentAngle;
-    public static float wantedAngle;
+    public static float wantedAngleRads;
     public static float servoPos;
     public static ArmStates currentState;
     public static ArmStates lastState;
+    public static float armDegrees;
     public static MotorControlParams armControlParams = new MotorControlParams(ArmConstants.KP, ArmConstants.KI, ArmConstants.KD, ArmConstants.Izone, ArmConstants.KS, ArmConstants.KV);
-    public static final float horzAngle = 0f;
 
-    public static void init(HardwareMap hardwareMap, String name, String name2, String name3){
+    public static void init(HardwareMap hardwareMap, String name, String name2, String name3) {
         armMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
         armMotor2 = new OrbitMotor(hardwareMap, name2, DcMotorSimple.Direction.REVERSE, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
         armServo = hardwareMap.get(Servo.class, name3);
     }
-    public static void operate(ArmStates state){
-        switch (state){
+
+    public static void operate(ArmStates state) {
+        switch (state) {
             case TRAVEL:
-                wantedAngle = ArmConstants.travelAngle;
+                wantedAngleRads = ArmConstants.travelAngle;
                 servoPos = ArmConstants.servoTravelPos;
                 break;
 
             case HIGH_TRAVEL:
-                wantedAngle = ArmConstants.highTravelAngle;
+                wantedAngleRads = ArmConstants.highTravelAngle;
                 servoPos = ArmConstants.servoHighTravelPos;
                 break;
 
             case INTAKE:
-                wantedAngle = ArmConstants.intakeAngle;
+                wantedAngleRads = ArmConstants.intakeAngle;
                 servoPos = ArmConstants.servoIntakePos;
                 break;
 
             case HIGH_CHAMBER:
-                wantedAngle = ArmConstants.highChamberAngle;
+                wantedAngleRads = ArmConstants.highChamberAngle;
                 servoPos = ArmConstants.servoHighChamberPos;
                 break;
 
             case LOW_BASKET:
-                wantedAngle = ArmConstants.lowBasketAngle;
+                wantedAngleRads = ArmConstants.lowBasketAngle;
                 servoPos = ArmConstants.servoLowBasketPos;
                 break;
 
             case HIGH_BASKET:
-                wantedAngle = ArmConstants.highBasketAngle;
+                wantedAngleRads = ArmConstants.highBasketAngle;
                 servoPos = ArmConstants.servoHighBasketPos;
                 break;
 
             case CLIMB:
-                wantedAngle = ArmConstants.climbAngle;
-                servoPos = ArmConstants.servoClimbPos;
+                wantedAngleRads = ArmConstants.climbAngle;
+                servoPos = ArmConstants.servoTravelPos;
                 break;
 
-        }
-        final float gForce = ArmConstants.KG * MathFuncs.sin(horzAngle - armMotor.getCurrentPosition(PositionUnits.DEGREES)) * Telescope.telescope_distance_LCG;
+            case LOW_CHAMBER:
+                wantedAngleRads = ArmConstants.lowChamberAngle;
+                servoPos = ArmConstants.servoLowChamberPos;
+                break;
 
-        armMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedAngle,gForce);
+
+        }
+        final float gForce = ArmConstants.KG * MathFuncs.cos(getAngle());
+
+        armMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedAngleRads, gForce);
         armMotor2.slave(armMotor);
+        armMotor.setPeak(1f);
+        armMotor2.setPeak(1f);
+
+
 
 
     }
-  //  public static float getArbitraryF(){
-    //  final float gForce = MathFuncs.sin(0);
-    //}
+
+    public static float getAngle() {
+        return (armMotor.getCurrentPosition(PositionUnits.RADS) + armMotor2.getCurrentPosition(PositionUnits.RADS)) / 2;
+
+    }
 }

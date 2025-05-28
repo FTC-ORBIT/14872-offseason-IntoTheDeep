@@ -13,11 +13,12 @@ import org.firstinspires.ftc.teamcode.robotSubSystems.Arm.ArmConstants;
 
 public class Telescope {
     private static OrbitMotor telescopeMotor;
-    private static MotorControlParams telescopeParams = new MotorControlParams(TelescopeConstants.KP, TelescopeConstants.KI, TelescopeConstants.KD, TelescopeConstants.iZone, TelescopeConstants.KS, TelescopeConstants.KV);
+    private static final MotorControlParams telescopeParams = new MotorControlParams(TelescopeConstants.KP, TelescopeConstants.KI, TelescopeConstants.KD, TelescopeConstants.iZone, TelescopeConstants.KS, TelescopeConstants.KV);
     private static float wantedLength;
+    public static float currentLength;
     private static TelescopeStates currentState = TelescopeStates.TRAVEL;
     private static TelescopeStates lastState = currentState;
-    private static float zeroPos = 0;
+    private static final float zeroPos = 0;
 
 
     public static void init(HardwareMap hardwareMap,String name){
@@ -49,17 +50,21 @@ public class Telescope {
             case HIGH_CHAMBER:
                 wantedLength = TelescopeConstants.highChamberLegnth;
                 break;
+
+            case CLIMB:
+                wantedLength = TelescopeConstants.climbLegnth;
+                break;
         }
         telescopeMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedLength, getArbitaryF());
 
         lastState = currentState;
+        currentLength = telescopeMotor.getCurrentPosition(PositionUnits.M);
+
+
     }
     public static float getArbitaryF(){
         final float gForce = MathFuncs.sin(0);
         final float spring = -TelescopeConstants.Kspring * (telescopeMotor.getCurrentPosition(PositionUnits.CM) - TelescopeConstants.travelLegnth);
-
         return spring + gForce;
     }
-    public static float telescope_distance_LCG = (zeroPos + telescopeMotor.getCurrentPosition(PositionUnits.M)) / 2 + ArmConstants.intakeMass;
-    //LCG is the length from center of gravity of the arm
 }

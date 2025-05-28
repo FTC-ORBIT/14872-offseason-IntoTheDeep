@@ -7,6 +7,7 @@ public class ArmConstants {
     public static final float highTravelAngle = 0f;
     public static final float intakeAngle = 0f;
     public static final float highChamberAngle = 0f;
+    public static final float lowChamberAngle = 0f;
     public static final float highBasketAngle = 0f;
     public static final float lowBasketAngle = 0f;
     public static final float climbAngle = 0f;
@@ -15,6 +16,7 @@ public class ArmConstants {
     public static final float servoHighTravelPos = 0f;
     public static final float servoIntakePos = 0f;
     public static final float servoHighChamberPos = 0f;
+    public static final float servoLowChamberPos = 0f;
     public static final float servoHighBasketPos = 0f;
     public static final float servoLowBasketPos = 0f;
     public static final float servoClimbPos = 0f;
