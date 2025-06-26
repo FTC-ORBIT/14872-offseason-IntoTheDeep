@@ -13,9 +13,13 @@ import org.firstinspires.ftc.teamcode.ScoringAutomator;
 import org.firstinspires.ftc.teamcode.autonomous.OrbitAutonomousGeneral;
 import org.firstinspires.ftc.teamcode.PoseTracker.OrbitPoseTracker;
 import org.firstinspires.ftc.teamcode.roadRunner_1_0.Drawing;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Arm.Arm;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Arm.ArmStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Intake.Intake;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Intake.IntakeStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Pinch.Pinch;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Pinch.PinchStates;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Telescope.Telescope;
 import org.firstinspires.ftc.teamcode.robotSubSystems.Telescope.TelescopeStates;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.DriveTrainOmni.DrivetrainOmni;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.AutoDrivesAndAssist.Assists.DriveByAprilTags.DriveByAprilTags;
@@ -139,13 +143,17 @@ public class SubSystemManager {
             case DEPLETE:
                 intakeState = IntakeStates.DEPLETE;
                 pinchState = PinchStates.OPEN;
+                break;
 
         }
 
         ScoringAutomator.update();
         ScoringAutomator.processAssists();
 
-
+        Arm.operate(armState);
+        Telescope.operate(telescopeState);
+        Intake.operate(intakeState);
+        Pinch.operate(pinchState);
         OrbitLEDBlinkin.operate(currentState, blink);
         if (resetGyro) OrbitGyro.resetGyro();
     }
