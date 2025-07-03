@@ -8,7 +8,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
-import org.firstinspires.ftc.teamcode.robotSubSystems.sampleArmSystem.SampleArmSystem;
 
 public class OrbitLEDServoVersion {
 
@@ -70,7 +69,6 @@ public class OrbitLEDServoVersion {
             LEDservo.setPosition(0);
 
 
-        if (SampleArmSystem.haveFault()) LEDservo.setPosition(0.25);
     }
 
     public static void test(Gamepad gamepad1, Telemetry telemetry){

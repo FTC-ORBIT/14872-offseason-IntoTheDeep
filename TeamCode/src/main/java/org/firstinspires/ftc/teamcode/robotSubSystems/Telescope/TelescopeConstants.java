@@ -2,12 +2,21 @@ package org.firstinspires.ftc.teamcode.robotSubSystems.Telescope;
 
 public  class TelescopeConstants {
     static final float intakeLegnth = 0;
-    static final float travelLegnth = 0;
-    static final float highBasketLegnth = 0;
-    static final float lowBasketLegnth = 0;
-    static final float highChamberLegnth = 0;
-    static final float lowChamberLegnth = 0;
-    static final float climbLegnth = 0;
+
+    public static final float travel = 36.3f; // -5f;
+    public static final float lowBasket = 50f; //-170f;
+    public static final float highBasket = 82.6f; //-692f;
+    public static final float frontHighChamber = 41f; // -60f;
+    public static final float backHighChamber = 41.0F; //-5f
+    public static final float climb = 45f;
+//    public static final float invertedChamberPos = 45.6f; // -144
+//    public static final float invertedBackChamberPos = 36.3f;
+//    public static final float intakeAuto = 48.5f;
+//    public static final float prepIntakeAuto = 43.5f;
+//    public static final float dragSpikeAuto = 76.6f;
+//    public static final float subIntake = 55f;
+
+
     static final double KP = 0;
     static final double KI = 0;
     static final double KD = 0;

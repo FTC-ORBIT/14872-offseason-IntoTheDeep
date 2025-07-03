@@ -4,7 +4,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
-import org.firstinspires.ftc.teamcode.robotSubSystems.sampleArmSystem.SampleArmSystem;
 
 public class OrbitLEDBlinkin {
 
@@ -63,7 +62,6 @@ public class OrbitLEDBlinkin {
         else
            blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.fromNumber(0));
 
-        if (SampleArmSystem.haveFault()) blinkin.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
 
     }
 }

@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.OrbitMotor;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.PositionUnits;
+import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.OrbitMotor;
 
 public class DriveTrainTank {
     public static final OrbitMotor[] motors = new OrbitMotor[2];

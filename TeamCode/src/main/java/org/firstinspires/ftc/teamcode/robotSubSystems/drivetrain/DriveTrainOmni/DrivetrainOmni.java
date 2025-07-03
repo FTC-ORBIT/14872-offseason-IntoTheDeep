@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.OrbitMotor;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.PositionUnits;
+import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.OrbitMotor;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Angle;
 import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
 import org.firstinspires.ftc.teamcode.OrbitUtils.OrbitLogger.CSVLogger;
@@ -24,7 +24,7 @@ import org.firstinspires.ftc.teamcode.roadRunner_1_0.Localizer;
 import org.firstinspires.ftc.teamcode.roadRunner_1_0.TwoDeadWheelLocalizer;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
-public class DrivetrainOmni {
+public class    DrivetrainOmni {
 
     public static final OrbitMotor[] motors = new OrbitMotor[4];
     public static float driveFactor = DrivetrainOmniConstants.power;
@@ -46,7 +46,7 @@ public class DrivetrainOmni {
         motors[2] = OrbitMotor.setFactorySettings(hardwareMap, "lb", DcMotorSimple.Direction.REVERSE);
         motors[3] = OrbitMotor.setFactorySettings(hardwareMap, "rb", DcMotorSimple.Direction.FORWARD);
 
-        omniDriveEncodersTracker = new OmniDriveEncodersTracker(hardwareMap,motors[0], motors[1], motors[2], motors[3],DrivetrainOmniConstants.inPerTick);
+//        omniDriveEncodersTracker = new OmniDriveEncodersTracker(hardwareMap,motors[0], motors[1], motors[2], motors[3],DrivetrainOmniConstants.inPerTick);
         twoDeadWheelsTracker = new TwoDeadWheelsTracker(hardwareMap,motors[0],motors[1],DrivetrainOmniConstants.inPerTick);
         twoDeadWheelLocalizer = new TwoDeadWheelLocalizer(hardwareMap, OrbitGyro.imu ,DrivetrainOmniConstants.inPerTick);
 

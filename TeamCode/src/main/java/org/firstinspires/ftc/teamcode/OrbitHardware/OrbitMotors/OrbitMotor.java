@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor;
+package org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -8,22 +8,28 @@ import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
-import org.firstinspires.ftc.robotcore.external.Const;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorControlMode;
+import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorControlParams;
+//import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorFaults;
+import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.PositionUnits;
+import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.VelocityUnits;
 import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
 import org.firstinspires.ftc.teamcode.OrbitUtils.MotionMagic;
 import org.firstinspires.ftc.teamcode.OrbitUtils.MotionProfiles.TrapezoidProfile;
 import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
-import org.firstinspires.ftc.teamcode.robotData.Constants;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OrbitMotor {
-    private final DcMotorEx motor;
+    private final DcMotor motor;
     private final PID motorPID;
     private final MotionMagic motorMotionMagic;
     private DcMotor.RunMode motorRunMode;
-    private boolean slaved = false;
+    ;
     private final DcMotorSimple.Direction direction;
     private final float physicalRatio;
     private final float gearRatio;
@@ -33,9 +39,9 @@ public class OrbitMotor {
     private MotorControlParams params;
     private float peak = 1;
     float prevVel = 0;
-    private float trapezoidPresentage = 0.9f;// default 0.9f
 
     public final boolean isAvailable;
+    private final List<OrbitMotor> slaves = new ArrayList<>();
 
     /**
      * input the wheelDiameter in M,
@@ -43,7 +49,7 @@ public class OrbitMotor {
      **/
 
     public OrbitMotor(final HardwareMap hardwareMap, final String name, final DcMotorSimple.Direction direction, final DcMotor.RunMode runMode, final DcMotor.ZeroPowerBehavior zeroPowerBehavior, final MotorControlParams controlParams, final float systemGearRatio, final float wheelDiameter, final Object units) {
-        this.motor = hardwareMap.tryGet(DcMotorEx.class, name);
+        this.motor = hardwareMap.tryGet(DcMotor.class, name);
         isAvailable = this.motor != null;
 
         if (!isAvailable) {
@@ -141,17 +147,8 @@ public class OrbitMotor {
     }
 
 
-    public void setTrapezoidPresentage(final float trapezoidPresentage) {
-        this.trapezoidPresentage = trapezoidPresentage;
-    }
-
-    public float getTrapezoidPresentage() {
-        return trapezoidPresentage;
-    }
-
-
     public void setPower(final MotorControlMode motorControlMode, final float wantedValue, final float arbitraryF) {
-        if (!isSlaved() && !checkForMotorFault()) {
+        if (true) {
             setWanted(wantedValue);
             float power = 0;
             switch (motorControlMode) {
@@ -159,29 +156,29 @@ public class OrbitMotor {
                     power = (float) motorPID.update(getCurrentPosition((PositionUnits) units));
                     break;
                 case PID_VELOCITY:
-                    power = (float) motorPID.update(getVelocity((VelocityUnits) units));
+//                    power = (float) motorPID.update(getVelocity((VelocityUnits) units));
                     break;
                 case MOTION_MAGIC_POSITION:
-                    power = (float) motorMotionMagic.update(getCurrentPosition((PositionUnits) units), 0);
+                    power = (float) motorMotionMagic.update(getCurrentPosition((PositionUnits) units));
                     break;
                 case MOTION_MAGIC_VELOCITY:
-                    power = (float) motorMotionMagic.update(getVelocity((VelocityUnits) units), 0);
+//                    power = (float) motorMotionMagic.update(getVelocity((VelocityUnits) units));
                     break;
                 case CURRENT:
-                    power = (float) motorPID.update(getCurrent((CurrentUnit) units));
-                    break;
+//                    power = (float) motorPID.update(getCurrent((CurrentUnit) units));
+//                    break;
                 case TRAPEZOID_VELOCITY:
-                    final float currentVel = getVelocity((VelocityUnits) units);
-                    final float deltaVel = wantedValue - currentVel;
-                    final float currentAccel = deltaVel / GlobalData.deltaTime;
-                    power = trapezoidProfile.velProfile(currentVel, deltaVel, (float) params.maxVel, currentAccel);
+//                    final float currentVel = getVelocity((VelocityUnits) units);
+//                    final float deltaVel = wantedValue - currentVel;
+//                    final float currentAccel = deltaVel / GlobalData.deltaTime;
+//                    power = trapezoidProfile.velProfile(currentVel, deltaVel, (float) params.maxVel, currentAccel);
                     break;
                 case TRAPEZOID_POSITION:
-                    final float deltaPos = wantedValue - getCurrentPosition((PositionUnits) units);
-                    final float currentVelocity = getVelocity(VelocityUnits.fromPosUnits((PositionUnits) units));
-                    final float currentAcceleration = (currentVelocity - prevVel) / GlobalData.deltaTime;
-                    prevVel = currentVelocity;
-                    power = trapezoidProfile.velProfile(currentVelocity, deltaPos, (float) params.maxVel, currentAcceleration);
+//                    final float deltaPos = wantedValue - getCurrentPosition((PositionUnits) units);
+//                    final float currentVelocity = getVelocity(VelocityUnits.fromPosUnits((PositionUnits) units));
+//                    final float currentAcceleration = (currentVelocity - prevVel) / GlobalData.deltaTime;
+//                    prevVel = currentVelocity;
+//                    power = trapezoidProfile.velProfile(currentVelocity, deltaPos, (float) params.maxVel, currentAcceleration);
                     break;
                 case NONE:
                 case CUSTOM_CONTROL:
@@ -192,12 +189,19 @@ public class OrbitMotor {
             power += arbitraryF;
             power = MathFuncs.limit(peak, power);
             motor.setPower(power);
+
+            // Set power to slaves if any
+            for (final OrbitMotor slave : slaves) {
+                if (true) {
+                    slave.setPower(power);
+                }
+            }
         }
     }
 
 
     public void setPower(final float value) {
-        if (!isSlaved() && !checkForMotorFault()) motor.setPower(value);
+        if (true) motor.setPower(value);
     }
 
     public float getPower() {
@@ -209,10 +213,10 @@ public class OrbitMotor {
         return motorPID.getWanted();
     }
 
-    public boolean checkForMotorFault() {
-        MotorFaults faults = new MotorFaults();
-        return faults.checkFaults(this);
-    }
+//    public boolean checkForMotorFault() {
+//        MotorFaults faults = new MotorFaults();
+//        return faults.checkFaults(this);
+//    }
 
 
     public void resetEncoder() {
@@ -221,43 +225,21 @@ public class OrbitMotor {
     }
 
 
-    public void slave(final OrbitMotor masterMotor) {
-        slaved = true;
-        setPeak(masterMotor.getPeak());
-        setPower(masterMotor.getPower());
+    public void slave(final OrbitMotor slaveMotor) {
+        if (slaveMotor != null) slaves.add(slaveMotor); // start as empty array
     }
 
-
-    public void unSlave() {
-        slaved = false;
-    }
-
-    public boolean isSlaved() {
-        return slaved;
-    }
 
     public boolean inPos(final float ticksForTolerance, final PositionUnits unit) {
         return MathFuncs.inTolerance(getCurrentPosition(unit), getWanted(), ticksForTolerance);
     }
 
-    public boolean inVel(final float velForTolerance, final VelocityUnits unit) {
-        return MathFuncs.inTolerance(getVelocity(unit), getWanted(), velForTolerance);
-    }
+//    public boolean inVel(final float velForTolerance, final VelocityUnits unit) {
+//        return MathFuncs.inTolerance(getVelocity(unit), getWanted(), velForTolerance);
+//    }
 
 
-    public void setMotorEnable() {
-        motor.setMotorEnable();
-    }
 
-
-    public void setMotorDisable() {
-        motor.setMotorDisable();
-    }
-
-
-    public boolean isMotorEnabled() {
-        return motor.isMotorEnabled();
-    }
 
     private void setDirection(DcMotorSimple.Direction direction) {
         motor.setDirection(direction);
@@ -267,35 +249,8 @@ public class OrbitMotor {
         return motor.getDirection();
     }
 
-    public void setVelocity(double angularRate) {
-        motor.setVelocity(angularRate);
-    }
 
 
-    public void setVelocity(double angularRate, AngleUnit unit) {
-        motor.setVelocity(angularRate, unit);
-    }
-
-
-    public float getVelocity(final VelocityUnits unit) {
-        switch (unit) {
-            case MM:
-                return Double.isNaN(motor.getVelocity()) ? 0 : (float) ((motor.getVelocity() / physicalRatio) * 60);
-            case MS:
-            default:
-                return Double.isNaN(motor.getVelocity()) ? 0 : (float) (motor.getVelocity() / physicalRatio);
-            case CMM:
-                return Double.isNaN(motor.getVelocity()) ? 0 : (float) ((motor.getVelocity() / physicalRatio / 100) * 60);
-            case CMS:
-                return Double.isNaN(motor.getVelocity()) ? 0 : (float) (motor.getVelocity() / physicalRatio / 100);
-            case DEG:
-                return Double.isNaN(motor.getVelocity(AngleUnit.DEGREES)) ? 0 : (float) motor.getVelocity(AngleUnit.DEGREES);
-            case RAD:
-                return Double.isNaN(motor.getVelocity(AngleUnit.RADIANS)) ? 0 : (float) motor.getVelocity(AngleUnit.RADIANS);
-            case TICKS_PER_SECOND:
-                return Double.isNaN(motor.getVelocity()) ? 0 : (float) motor.getVelocity();
-        }
-    }
 
     public float getCurrentPosition(final PositionUnits unit) {
         switch (unit) {
@@ -316,41 +271,38 @@ public class OrbitMotor {
     }
 
 
-    public double getCurrent(CurrentUnit unit) {
-        return motor.getCurrent(unit);
-    }
+//    public double getCurrent(CurrentUnit unit) {
+//        return motor.getCurrent(unit);
+//    }
 
 
     public void resetEncoderByCurrentLimitGiven(final float current) {
-        if (motor.getCurrent(CurrentUnit.AMPS) > current) {
-            resetEncoder();
-        }
-    }
-
-    public void resetEncoderByCurrentLimitGiven() {
-        if (checkForCurrentFault()) resetEncoder();
-    }
-
-    public double getCurrentAlert(CurrentUnit unit) {
-        return motor.getCurrentAlert(unit);
+//        if (getCurrent(CurrentUnit.AMPS) > current) {
+//            resetEncoder();
+//        }
     }
 
 
-    private void setCurrentAlert(double current, CurrentUnit unit) {
-        motor.setCurrentAlert(current, unit);
-    }
+//    public double getCurrentAlert(CurrentUnit unit) {
+//        return motor.getCurrentAlert(unit);
+//    }
 
+//
+//    private void setCurrentAlert(double current, CurrentUnit unit) {
+//        motor.setCurrentAlert(current, unit);
+//    }
 
-    public boolean checkForCurrentFault() {
-        return motor.isOverCurrent();
-    }
+//
+//    public boolean checkForCurrentFault() {
+//        return motor.isOverCurrent();
+//    }
 
 
     public MotorConfigurationType getMotorType() {
         return motor.getMotorType();
     }
 
-    public void setMotorType(MotorConfigurationType motorType) {
+    public void setMotorType(final MotorConfigurationType motorType) {
         motor.setMotorType(motorType);
     }
 
@@ -362,7 +314,7 @@ public class OrbitMotor {
         return motor.getPortNumber();
     }
 
-    public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
+    public void setZeroPowerBehavior(final DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
         motor.setZeroPowerBehavior(zeroPowerBehavior);
     }
 
@@ -371,11 +323,11 @@ public class OrbitMotor {
     }
 
     public boolean isBusy() {
-        return motor.getPower() != 0 || motor.getVelocity() != 0 || motor.getCurrent(CurrentUnit.AMPS) != 0;
+        return getPower() != 0 ;
     }
 
 
-    public void setMode(DcMotor.RunMode mode) {
+    public void setMode(final DcMotor.RunMode mode) {
         motorRunMode = mode;
         motor.setMode(mode);
     }
@@ -407,5 +359,9 @@ public class OrbitMotor {
 
     public void close() {
         motor.close();
+    }
+
+    public float getVelocity(final VelocityUnits units){
+        return 0;
     }
 }

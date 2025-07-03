@@ -122,7 +122,7 @@ public class MotionMagic {
         return new MotorControlParams(kP, kI, kD, iZone, kS, kV, kA, kJ ,vMax, aMax, jMax);
     }
 
-    public double update(final double current, final float powerForG) {
+    public double update(final double current) {
         final double currentTime = timer.seconds();
         final double deltaTime = currentTime - prevTime;
 
@@ -133,7 +133,6 @@ public class MotionMagic {
             startMotionCurrent = current;
         } else {
             jW = deltaTime != 0 ? (aW - aWPrev) / deltaTime : 0;
-            jW = MathFuncs.limit(jMax == 0 ? Constants.INF : (float) jMax, (float) jW);
             aW = aWPrev + jW * deltaTime;
         }
 
@@ -150,10 +149,10 @@ public class MotionMagic {
                         MathFuncs.twoPointsLinear(
                                 new Vector((float) startMotionCurrent, (float) vMax),
                                 new Vector((float) target, 0), (float) current)
-                        : 0 ,
+                        : Constants.INF ,
 
                 vMax != 0 ? trapezoidProfile.velProfile((float) vWPrev, (float) (target - current), (float) vMax, (float) aW)
-                        : 0,
+                        : Constants.INF,
                 sCurveProfile.velProfile((float) deltaTime, (float) target, (float) current),
                 polygonProfile.velProfile((float) deltaTime, (float) target, (float) current)
         );
@@ -189,6 +188,6 @@ public class MotionMagic {
         prevTarget = target;
         prevDeltaTime = deltaTime;
 
-        return pS + powerForG + pV + pA + pJ + pPID;
+        return pS + pV + pA + pJ + pPID;
     }
 }

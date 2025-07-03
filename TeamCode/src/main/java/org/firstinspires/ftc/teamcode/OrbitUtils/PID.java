@@ -64,6 +64,6 @@ public class PID {
         prevTime = currentTime;
 
         final float pidPower = (float) (kP * currentError + kI * integral + kD * derivative);
-        return pidPower + kV * Math.signum(pidPower);
+        return pidPower + kV * Math.signum(wanted - current);
     }
 }

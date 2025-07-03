@@ -54,8 +54,6 @@ public class SubSystemManager {
                 : GlobalData.driverRawButtons.get(ButtonsId.START) ? RobotState.CLIMB
                 : lastState;
 
-
-
         return wantedState;
     }
 
@@ -100,7 +98,7 @@ public class SubSystemManager {
 
             case INTAKE:
                 armState = ArmStates.INTAKE;
-                telescopeState = TelescopeStates.TRAVEL;
+                telescopeState = TelescopeStates.INTAKE;
                 pinchState = PinchStates.MID_OPEN;
                 intakeState = IntakeStates.INTAKE;
                 break;
@@ -128,7 +126,7 @@ public class SubSystemManager {
 
             case LOW_CHAMBER:
                 armState = ArmStates.LOW_CHAMBER;
-                telescopeState = TelescopeStates.TRAVEL;
+                telescopeState = TelescopeStates.LOW_CHAMBER;
                 pinchState = PinchStates.CLOSED;
                 intakeState = IntakeStates.STOP;
                 break;
