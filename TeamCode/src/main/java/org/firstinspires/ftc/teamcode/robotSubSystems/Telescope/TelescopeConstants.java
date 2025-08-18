@@ -22,6 +22,8 @@ public  class TelescopeConstants {
     static final double KD = 0;
     static final double KS = 0;
     static final double KV = 0;
+    static final float KG = 0.17f;
+
     static final double iZone = 0;
     //static final double gearRatio = 0;
     static final float Kspring = 0;

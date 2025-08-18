@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.MotorContr
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.Motor.PositionUnits;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitMotors.OrbitMotor;
 import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Arm.Arm;
 
 public class Telescope {
     private static OrbitMotor telescopeMotor;
@@ -63,7 +64,7 @@ public class Telescope {
 
     }
     public static float getArbitaryF(){
-        final float gForce = MathFuncs.sin(0);
+        final float gForce = -TelescopeConstants.KG * MathFuncs.sin(Arm.getAngle());
         final float spring = -TelescopeConstants.Kspring * (telescopeMotor.getCurrentPosition(PositionUnits.CM) - TelescopeConstants.travel);
         return spring + gForce;
     }

@@ -16,10 +16,8 @@ import org.firstinspires.ftc.teamcode.OrbitUtils.PID;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
 
 public class Arm {
-    //    public static OrbitMotor armMotor;
-    static DcMotor motor;
-    static DcMotor motor2;
-    //    public static OrbitMotor armMotor2;
+    public static OrbitMotor armMotor;
+    public static OrbitMotor armMotor2;
     public static Servo armServo;
     public static float currentAngle;
     public static float wantedAngleRads;
@@ -33,15 +31,17 @@ public class Arm {
     public static PID pid = new PID(armControlParams);
 
     public static void init(HardwareMap hardwareMap, String name, String name2, String name3) {
-//        armMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
-//        armMotor2 = new OrbitMotor(hardwareMap, name2, DcMotorSimple.Direction.REVERSE, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
+        armMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
+        armMotor2 = new OrbitMotor(hardwareMap, name2, DcMotorSimple.Direction.REVERSE, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
         armServo = hardwareMap.get(Servo.class, name3);
 //
-        motor = hardwareMap.get(DcMotor.class, name);
-        motor2 = hardwareMap.get(DcMotor.class, name2);
+//        motor = hardwareMap.get(DcMotor.class, name);
+//        motor2 = hardwareMap.get(DcMotor.class, name2);
 
 //        armMotor.setPeak(0.3f);
 //        armMotor2.setPeak(0.3f);
+
+        armMotor.slave(armMotor2);
     }
 
     public static void operate(ArmStates state) {
@@ -88,29 +88,14 @@ public class Arm {
 
 
         }
-//        final float gForce = ArmConstants.KG * MathFuncs.cos(getAngle());
+        final float gForce = ArmConstants.KG * MathFuncs.cos(getAngle());
 
-//        armMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedAngleRads, gForce);
-//        armMotor.setPower(-0.4f);
-//        armMotor2.setPower(-0.4f);
-
-
-
-        currentPos = (float) (motor.getCurrentPosition() + motor2.getCurrentPosition()) / 2 ;
-        pid.setWanted(wantedAngleRads * ArmConstants.TicksInRad);
-
-        final float power = (float) pid.update(currentPos);
-
-        motor.setPower(power);
-        motor2.setPower(power);
-
-//        motor.setPower(-0.4);
-//        motor2.setPower(-0.4);
+        armMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedAngleRads, gForce);
 
     }
 
     public static float getAngle() {
-        return (currentPos ) / ArmConstants.TicksInRad;
+        return (armMotor.getCurrentPosition(PositionUnits.RADS) + armMotor2.getCurrentPosition(PositionUnits.RADS)  ) / 2 / ArmConstants.TicksInRad;
 
     }
 
@@ -119,6 +104,6 @@ public class Arm {
     }
 
     public static float getPower() {
-        return (float) motor.getPower();
+        return (float) armMotor.getPower();
     }
 }
