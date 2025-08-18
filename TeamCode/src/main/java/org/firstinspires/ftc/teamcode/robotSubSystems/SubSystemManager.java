@@ -39,6 +39,7 @@ public class SubSystemManager {
     public static PinchStates pinchState = PinchStates.CLOSED;
     public static IntakeStates intakeState = IntakeStates.STOP;
     public static Pose2D robotPos;
+    public boolean deplete = false;
 
     private static RobotState getStateFromDriver(Gamepad gamepad) {
 
@@ -59,7 +60,7 @@ public class SubSystemManager {
     }
 
     private static RobotState getStateFromRobot(RobotState currentState) {
-        if (!GlobalData.robotState.equals(currentState) && !GlobalData.robotState.equals(lastState)){
+        if (!GlobalData.robotState.equals(currentState) && !GlobalData.robotState.equals(lastState)) {
             return GlobalData.robotState;
         }
         if (currentState.equals(RobotState.INTAKE) & GlobalData.hasGamePiece) {
@@ -139,12 +140,14 @@ public class SubSystemManager {
                 intakeState = IntakeStates.STOP;
                 break;
 
-            case DEPLETE:
+            /*   case DEPLETE:
                 intakeState = IntakeStates.DEPLETE;
                 pinchState = PinchStates.OPEN;
-                break;
+                break; */
 
         }
+
+
 
         ScoringAutomator.update();
         ScoringAutomator.processAssists();
