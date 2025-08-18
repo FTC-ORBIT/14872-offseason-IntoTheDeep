@@ -54,8 +54,8 @@ public class Telescope {
                 wantedLength = TelescopeConstants.climb;
                 break;
         }
-        telescopeMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedLength, getArbitaryF());
         telescopeMotor.setPeak(0.3f);
+        telescopeMotor.setPower(MotorControlMode.MOTION_MAGIC_POSITION, wantedLength, getArbitaryF());
 
         lastState = currentState;
         currentLength = telescopeMotor.getCurrentPosition(PositionUnits.M);

@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitGamepad.ButtonsId;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitLEDS.OrbitLEDBlinkin;
+import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitLEDS.OrbitLEDServoVersion;
 import org.firstinspires.ftc.teamcode.OrbitUtils.Pose2D;
 import org.firstinspires.ftc.teamcode.ScoringAutomator;
 import org.firstinspires.ftc.teamcode.autonomous.OrbitAutonomousGeneral;
@@ -152,7 +153,7 @@ public class SubSystemManager {
         Telescope.operate(telescopeState);
         Intake.operate(intakeState);
         Pinch.operate(pinchState);
-        OrbitLEDBlinkin.operate(currentState, blink);
+        OrbitLEDServoVersion.operate(currentState, blink);
         if (resetGyro) OrbitGyro.resetGyro();
     }
 
