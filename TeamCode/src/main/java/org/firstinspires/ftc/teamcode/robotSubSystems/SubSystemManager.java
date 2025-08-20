@@ -39,7 +39,7 @@ public class SubSystemManager {
     public static PinchStates pinchState = PinchStates.CLOSED;
     public static IntakeStates intakeState = IntakeStates.STOP;
     public static Pose2D robotPos;
-    public boolean deplete = false;
+    public static boolean deplete = false;
 
     private static RobotState getStateFromDriver(Gamepad gamepad) {
 
@@ -147,6 +147,7 @@ public class SubSystemManager {
 
         }
 
+        deplete = GlobalData.driverRawButtons.get(ButtonsId.RIGHT_BUMPER);
 
 
         ScoringAutomator.update();
@@ -160,6 +161,10 @@ public class SubSystemManager {
         if (resetGyro) OrbitGyro.resetGyro();
     }
 
+    public static boolean getDeplete() {
+
+        return deplete;
+    }
 
     public static void printData(Telemetry telemetry, TelemetryPacket packet, FtcDashboard dashboard) {
         if (GlobalData.inCompetition) {
