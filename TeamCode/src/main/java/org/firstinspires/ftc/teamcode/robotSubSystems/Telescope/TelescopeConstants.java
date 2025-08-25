@@ -9,12 +9,15 @@ public  class TelescopeConstants {
     public static final float frontHighChamber = 41f; // -60f;
     public static final float backHighChamber = 41.0F; //-5f
     public static final float climb = 45f;
+    public static final float overrideFactor = 0f;
 //    public static final float invertedChamberPos = 45.6f; // -144
 //    public static final float invertedBackChamberPos = 36.3f;
 //    public static final float intakeAuto = 48.5f;
 //    public static final float prepIntakeAuto = 43.5f;
 //    public static final float dragSpikeAuto = 76.6f;
 //    public static final float subIntake = 55f;
+public static final float closeLegnth = 36f;
+
 
 
     static final double KP = 0;

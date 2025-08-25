@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robotData;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitGamepad.ButtonsId;
+import org.firstinspires.ftc.teamcode.OrbitUtils.Vector;
 import org.firstinspires.ftc.teamcode.autonomous.OrbitPosMap;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
 
@@ -32,4 +33,10 @@ public class GlobalData {
     public static List<Boolean> driverPressedButtons = Collections.nCopies(ButtonsId.ids.size(), false);
     public static List<Boolean> driverRawButtons = Collections.nCopies(ButtonsId.ids.size(), false);
     public static OrbitPosMap posMap = new OrbitPosMap();
+    public static float IntakeLength = 0f;
+    public static float IntakeAngle = 0f;
+
+    public static Vector rightStick = Vector.zero();
 }
+
+

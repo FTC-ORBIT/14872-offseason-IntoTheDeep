@@ -103,6 +103,7 @@ public class SubSystemManager {
                 telescopeState = TelescopeStates.INTAKE;
                 pinchState = PinchStates.MID_OPEN;
                 intakeState = IntakeStates.INTAKE;
+                ScoringAutomator.calcIntakeOverride();
                 break;
 
             case HIGH_BASKET:
@@ -162,12 +163,11 @@ public class SubSystemManager {
     }
 
     public static boolean getDeplete() {
-
         return deplete;
     }
 
     public static void printData(Telemetry telemetry, TelemetryPacket packet, FtcDashboard dashboard) {
-        if (GlobalData.inCompetition) {
+         if (GlobalData.inCompetition) {
             telemetry.addData("Robot current state ", wantedState);
             telemetry.addData("drive factor", DrivetrainOmni.driveFactor);
             telemetry.addData("gyro angle", OrbitGyro.getAngle());

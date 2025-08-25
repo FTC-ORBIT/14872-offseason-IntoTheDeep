@@ -8,8 +8,12 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.OrbitHardware.OrbitGamepad.ButtonsId;
+import org.firstinspires.ftc.teamcode.OrbitUtils.MathFuncs;
+import org.firstinspires.ftc.teamcode.robotData.Constants;
 import org.firstinspires.ftc.teamcode.robotData.GlobalData;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Arm.ArmConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.RobotState;
+import org.firstinspires.ftc.teamcode.robotSubSystems.Telescope.TelescopeConstants;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.AutoDrivesAndAssist.Assists.DriveByAprilTags.DriveByAprilTags;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.AutoDrivesAndAssist.Assists.DriveByObjects.DriveByObjects;
 import org.firstinspires.ftc.teamcode.robotSubSystems.drivetrain.AutoDrivesAndAssist.Assists.OrbitAssists;
@@ -72,4 +76,19 @@ public class ScoringAutomator {
         }
     }
 
+    private static float intakeDistance ;
+    private static float intakeHeight ;
+    public static void calcIntakeOverride(){
+        if (!GlobalData.robotState.equals(RobotState.INTAKE)){
+            intakeDistance = Constants.initHeightAndDistance.snd;
+            intakeHeight = Constants.initHeightAndDistance.fst;
+        }
+
+        intakeDistance += GlobalData.rightStick.x * TelescopeConstants.overrideFactor;
+        intakeHeight -= GlobalData.rightStick.y * ArmConstants.overrideFactor;
+
+        GlobalData.IntakeLength = MathFuncs.sqrt((float) (Math.pow((intakeDistance + TelescopeConstants.closeLegnth), 2) + Math.pow((intakeHeight + ArmConstants.travelAngle) , 2)));
+
+        GlobalData.IntakeAngle = MathFuncs.atan(intakeDistance / intakeHeight);
+    }
 }

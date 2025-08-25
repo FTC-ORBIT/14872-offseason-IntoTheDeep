@@ -75,6 +75,7 @@ public class ArmConstants {
     public static final float gearRatio = 4f; // bigger - power, smaller - vel
     public static final float TicksInRad = -5303f;
     public static final float horizontalTicks = -3768f;
+    public static final float overrideFactor = 0f;
 
 
 }

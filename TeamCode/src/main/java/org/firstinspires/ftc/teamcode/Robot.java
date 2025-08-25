@@ -67,7 +67,6 @@ public class Robot extends LinearOpMode {
         Telescope.init(hardwareMap,"telMotor");
         Pinch.init(hardwareMap, "pinchServo");
         Intake.init(hardwareMap, "cargoServo1", "cargoServo2");
-//        DriveTrainTank.init(hardwareMap);
         ScoringAutomator.initAssists(hardwareMap,"webcam1","webcam2");
         OrbitGyro.init(hardwareMap);
         OrbitLEDBlinkin.init(hardwareMap);
@@ -112,6 +111,8 @@ public class Robot extends LinearOpMode {
             final Vector driverVel = new Vector(usingDashboardForDriving ? -factorizedY : factorizedX, usingDashboardForDriving ? factorizedX : -factorizedY);
             final float omega = gamepad1.right_trigger - gamepad1.left_trigger;
             DrivetrainOmni.operate(driverVel.switchBetweenAxis(),omega);
+
+            GlobalData.rightStick = orbitGamepad1.rightJoyStick();
 //          DriveTrainTank.operate(gamepad1.left_stick_y,gamepad1.right_trigger,gamepad1.left_trigger,telemetry,gamepad1);
 
 

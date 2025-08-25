@@ -30,7 +30,7 @@ public class Arm {
 
     public static PID pid = new PID(armControlParams);
 
-    public static void init(HardwareMap hardwareMap, String name, String name2, String name3) {
+    public static void init (HardwareMap hardwareMap, String name, String name2, String name3) {
         armMotor = new OrbitMotor(hardwareMap, name, DcMotorSimple.Direction.FORWARD, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
         armMotor2 = new OrbitMotor(hardwareMap, name2, DcMotorSimple.Direction.REVERSE, DcMotor.RunMode.RUN_USING_ENCODER, DcMotor.ZeroPowerBehavior.BRAKE, armControlParams, ArmConstants.gearRatio, ArmConstants.armWheelDiameter, PositionUnits.RADS);
         armServo = hardwareMap.get(Servo.class, name3);

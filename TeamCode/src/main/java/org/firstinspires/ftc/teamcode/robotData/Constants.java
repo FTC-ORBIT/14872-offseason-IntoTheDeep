@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.robotData;
 
+import com.sun.tools.javac.util.Pair;
+
 public  class Constants {
     public static  final float teleopCodeCycleTime = 0.05f; //TODO tune
     public static final float INF = 1e5f;
@@ -9,4 +11,6 @@ public  class Constants {
     public static final float wallX = 72; // in inch
     public static final float wally = 72; // in inch
     // our 0,0 is in the center of the field.
+
+    public static final Pair<Float,Float> initHeightAndDistance = Pair.of(6.5f,15f);
 }

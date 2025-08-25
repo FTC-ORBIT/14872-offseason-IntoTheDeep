@@ -22,10 +22,6 @@ public class Intake {
                 wantedPower = IntakeConstants.intakePower;
                 break;
 
-            case DEPLETE:
-                wantedPower = IntakeConstants.depletePower;
-                break;
-
             case STOP:
                 wantedPower = IntakeConstants.stoppedPower;
                 break;
